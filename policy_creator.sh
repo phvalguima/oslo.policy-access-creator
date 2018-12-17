@@ -2,6 +2,9 @@
 
 function check_if_uuid_on_url {
 	for part in $(echo "$1" | sed 's/\// /g'); do
+		# Some IDs at OS come as a single string of chars, like user's and project's IDs
+		# The majority, however, follow the pattern: XXXXXXXX-XXXX-XXXX-XXXXXXXXXXXX
+		# We will search for both
 		if [[ $part =~ ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$ ]] || [[ $part =~ ^[a-fA-F0-9]{28} ]]; then 
 			url_uuid=$part
 			return 0
