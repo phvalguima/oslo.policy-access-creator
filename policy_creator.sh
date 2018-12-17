@@ -130,6 +130,8 @@ for svc in $services; do
         if [ ! -z $url_uuid ]; then
                 public=$(echo $public | awk -F"${url_uuid}" '{print $1}')
                 uuid_and_url=$(echo "$public$url_uuid")
+		# In some cases, we might have multiple copies of same endpoint URL
+		# To avoid confusion, we just look for .[0]
 	        public_json=$(jq --arg url $public --arg uuid_and_url $uuid_and_url -M 'map(select(.URL == $url)) | del(.[0].Enabled) | del(.[0]."Service Type") | del(.[0]."Service Name") | . [0] | .URL=$uuid_and_url' /tmp/endpoint.file)
 	else
 	        public_json=$(jq --arg url $public -M 'map(select(.URL == $url)) | del(.[0].Enabled) | del(.[0]."Service Type") | del(.[0]."Service Name") | . [0]' /tmp/endpoint.file)
